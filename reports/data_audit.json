@@ -1,0 +1,29 @@
+{
+  "rows": 16598,
+  "columns": 11,
+  "duplicate_rows": 0,
+  "missing_values": {
+    "Year": 271,
+    "Publisher": 58
+  },
+  "unique_values": {
+    "Platform": 31,
+    "Genre": 12,
+    "Publisher": 578
+  },
+  "year_range": {
+    "min": 1980.0,
+    "max": 2020.0
+  },
+  "target_summary": {
+    "count": 16598.0,
+    "mean": 0.5374406555006628,
+    "std": 1.5550279355699124,
+    "min": 0.01,
+    "25%": 0.06,
+    "50%": 0.17,
+    "75%": 0.47,
+    "max": 82.74
+  },
+  "max_regional_sum_difference": 0.020000000000000462
+}
