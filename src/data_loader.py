@@ -1,14 +1,19 @@
-"""读取并审计电子游戏销量数据集。"""
+"""读取、审计并清洗电子游戏销量数据集。"""
 
 from pathlib import Path
 from typing import Any, Dict, Union
 
 import pandas as pd
 
-from src.config import TARGET_COLUMN
+from src.config import (
+    FEATURE_COLUMNS,
+    MAX_VALID_YEAR,
+    MIN_VALID_YEAR,
+    TARGET_COLUMN,
+)
 
 SOURCE_COLUMNS = [
-    # 原始 CSV 必须包含这些列，否则数据审计结果将不完整。
+    # 原始 CSV 必须包含这些列，否则数据审计和清洗结果将不完整。
     "Rank",
     "Name",
     "Platform",
@@ -79,3 +84,37 @@ def audit_data(data: pd.DataFrame) -> Dict[str, Any]:
             (regional_sum - target).abs().max()
         ),
     }
+
+
+def clean_data(data: pd.DataFrame) -> pd.DataFrame:
+    """清洗数据：处理缺失值、异常年份、重复记录和异常销量。"""
+    # 复制数据，防止清洗过程意外修改调用方传入的原始 DataFrame。
+    cleaned = data.copy()
+
+    # 年份和销量统一转换为数值，无法解析的值会变成缺失值。
+    cleaned["Year"] = pd.to_numeric(cleaned["Year"], errors="coerce")
+    cleaned[TARGET_COLUMN] = pd.to_numeric(
+        cleaned[TARGET_COLUMN], errors="coerce"
+    )
+
+    # 去除类别字段两端空格，避免同一类别因空格不同被拆成多类。
+    for column in ["Platform", "Genre", "Publisher"]:
+        cleaned[column] = cleaned[column].astype("string").str.strip()
+
+    # 关键字段或销量缺失的行无法可靠使用，予以删除。
+    required_columns = FEATURE_COLUMNS + [TARGET_COLUMN]
+    cleaned = cleaned.dropna(subset=required_columns)
+
+    # 仅保留可信的发行年份范围，过滤明显错误的极端年份。
+    cleaned = cleaned[
+        cleaned["Year"].between(MIN_VALID_YEAR, MAX_VALID_YEAR)
+    ]
+
+    # 销量不能为负数；完全相同的数据行只保留一条。
+    cleaned = cleaned[cleaned[TARGET_COLUMN] >= 0]
+    cleaned = cleaned.drop_duplicates().reset_index(drop=True)
+
+    if cleaned.empty:
+        raise ValueError("No valid rows remain after cleaning.")
+
+    return cleaned

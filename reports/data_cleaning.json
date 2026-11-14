@@ -1,0 +1,18 @@
+{
+  "rows_before": 16598,
+  "rows_after": 16287,
+  "rows_removed": 311,
+  "columns": [
+    "Rank",
+    "Name",
+    "Platform",
+    "Year",
+    "Genre",
+    "Publisher",
+    "NA_Sales",
+    "EU_Sales",
+    "JP_Sales",
+    "Other_Sales",
+    "Global_Sales"
+  ]
+}
