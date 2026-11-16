@@ -1,17 +1,18 @@
-"""从项目根目录运行数据分析流程：读取原始数据、审计并清洗。"""
+"""从项目根目录运行数据分析流程：读取原始数据、审计、清洗并生成探索性分析图表。"""
 
 import argparse
 import json
 from pathlib import Path
 
-from src.config import DEFAULT_DATA_PATH, REPORTS_DIR
+from src.config import DEFAULT_DATA_PATH, FIGURES_DIR, REPORTS_DIR
 from src.data_loader import audit_data, clean_data, load_raw_data
+from src.eda import generate_eda
 
 
 def parse_args() -> argparse.Namespace:
     # 命令行参数允许在不修改代码的情况下更换数据路径。
     parser = argparse.ArgumentParser(
-        description="Audit and clean the raw video game sales dataset."
+        description="Audit, clean and explore the raw video game sales dataset."
     )
     parser.add_argument(
         "--data-path",
@@ -48,7 +49,14 @@ def main() -> None:
     ) as handle:
         json.dump(cleaning_summary, handle, indent=2, ensure_ascii=False)
 
-    print(json.dumps(cleaning_summary, indent=2, ensure_ascii=False))
+    # 第三步：生成探索性分析图表并保存关键结论。
+    eda_summary = generate_eda(cleaned_data, FIGURES_DIR)
+    with (reports_dir / "eda_summary.json").open(
+        "w", encoding="utf-8"
+    ) as handle:
+        json.dump(eda_summary, handle, indent=2, ensure_ascii=False)
+
+    print(json.dumps(eda_summary, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

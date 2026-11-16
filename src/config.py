@@ -8,6 +8,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 # 数据与报告的默认位置。
 DEFAULT_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "vgsales.csv"
 REPORTS_DIR = PROJECT_ROOT / "reports"
+FIGURES_DIR = REPORTS_DIR / "figures"
 
 # 目标销量列，数据审计时用于统计。
 TARGET_COLUMN = "Global_Sales"
