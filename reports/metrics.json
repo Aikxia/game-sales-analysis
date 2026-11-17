@@ -1,0 +1,38 @@
+{
+  "dataset": {
+    "rows_used": 16287,
+    "train_rows": 13029,
+    "test_rows": 3258
+  },
+  "experiment": {
+    "target": "Global_Sales",
+    "features": [
+      "Platform",
+      "Year",
+      "Genre",
+      "Publisher"
+    ],
+    "excluded_leaky_columns": [
+      "Rank",
+      "NA_Sales",
+      "EU_Sales",
+      "JP_Sales",
+      "Other_Sales"
+    ],
+    "test_size": 0.2,
+    "random_state": 42,
+    "target_transform": "log1p for linear regression, none for mean baseline"
+  },
+  "metrics": {
+    "mean_baseline": {
+      "mae": 0.6187484329828332,
+      "rmse": 2.0677671872849452,
+      "r2": -0.0002604956750733578
+    },
+    "linear_regression_log_target": {
+      "mae": 0.4749431478992357,
+      "rmse": 2.008175359873757,
+      "r2": 0.05656256147272276
+    }
+  }
+}
