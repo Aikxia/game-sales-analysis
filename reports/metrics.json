@@ -21,7 +21,7 @@
     ],
     "test_size": 0.2,
     "random_state": 42,
-    "target_transform": "log1p for linear regression, none for mean baseline"
+    "target_transform": "log1p for linear regression and random forest, none for mean baseline"
   },
   "metrics": {
     "mean_baseline": {
@@ -33,6 +33,13 @@
       "mae": 0.4749431478992357,
       "rmse": 2.008175359873757,
       "r2": 0.05656256147272276
+    },
+    "random_forest_log_target": {
+      "mae": 0.46754897078592483,
+      "rmse": 1.9858593372530042,
+      "r2": 0.0774141172777425
     }
-  }
+  },
+  "selected_model": "random_forest_log_target",
+  "model_path": "models/random_forest_log_target.joblib"
 }
